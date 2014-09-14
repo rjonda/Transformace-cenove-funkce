@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <title>
+      Graf viewer
+    </title>
+    <link rel="stylesheet" type="text/css" href="./style.css">
+    <script src="./vzorec.js"></script>
+    <script src="./script.js"></script>
+  </head>
+  <body onResize="resize(); resize();" onLoad="load()">
+    <span id="grafZone" onMouseDown="down()" onMouseUp="up()">
+      <span id="grafBorder">
+      </span>  
+    </span>
+    <span id="menuZone">
+      <span id="masterGrafA"></span>
+      <span id="masterGrafN"></span>
+      <span id="MasterA">N/A</span>
+      <span id="MasterN">N/A</span>
+      <span id="cutButton" onMouseOver="this.style.backgroundColor = '#999999'" onMouseOut="this.style.backgroundColor = '#EEEEEE'" onClick="cut();">Pøesuò spotøebu</span>
+      <p style="position: absolute; top: 200px;"><b>Najeto: <span id="OverA">N/A</span>/<span id="OverN">N/A</span></b></p>
+      <p style="position: absolute; top: 220px;"><b>Vybráno: <span id="SelA">N/A</span>/<span id="SelN">N/A</span></b></p>
+    </span>
+  </body>
+</html>

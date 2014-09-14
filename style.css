@@ -1,0 +1,152 @@
+body {
+  margin: 0px;
+  padding: 0px;
+  font-family: arial, sans-serif;
+}
+
+#grafZone, #menuZone {
+  margin: 0px;
+  padding: 0px;
+  height: 100%;
+  display: block;
+  white-space: nowrap;
+  position: absolute;
+  top: 0px;
+}
+
+#grafZone {
+  background-color: #FFFFFF;
+  left: 0px;
+}
+
+#menuZone {
+  width: 200px;
+  background-color: #CCCCCC;
+  right: 0px;
+  border-left: 4 solid #000000;
+}
+
+#grafBorder {
+  display: block;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  border-left: 3 solid #000000;
+  border-bottom: 3 solid #000000;
+  margin: 0px;
+  padding: 0px;  
+}
+
+.grafColumnA, .grafColumnN {
+  display: block;
+  position: absolute;
+  width: 2px;
+}
+
+.grafColumnA {
+  bottom: 0px;
+  background-color: rgb(0,102,0);
+}
+
+.grafColumnN {
+  background-color: rgb(51,153,0);
+}
+
+.grafLabel {
+  display: block;
+  position: absolute;
+  bottom: -35px;
+  -ms-transform: rotate(90deg); /* IE 9 */
+  -webkit-transform: rotate(90deg); /* Chrome, Safari, Opera */
+  transform: rotate(90deg);
+}
+
+#grafPointer {
+  display: block;
+  position: absolute;
+  top: 20px;
+  margin: 0px;
+  padding: 0px;
+  width: 2px;
+  background-color: rgba(0,0,0,0.6);
+}
+
+#grafPointerVertical {
+  display: block;
+  position: absolute;
+  left: 20px;
+  margin: 0px;
+  padding: 0px;
+  height: 2px;
+  background-color: rgba(0,0,0,0.6);
+}
+
+#grafSelecter {
+  display: block;
+  position: absolute;
+  top: 20px;
+  margin: 0px;
+  padding: 0px;
+  background-color:  rgba(0,0,153,0.4);
+}
+
+#masterGrafA, #masterGrafN {
+  display: block;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  margin: 0px;
+  padding: 0px;
+  width: 100px;
+}
+
+#masterGrafA {
+  background-color: rgb(0,102,0);
+  border-bottom: 2 solid #000000;
+  border-left: 2 solid #000000;
+  border-right: 2 solid #000000;
+}
+
+#masterGrafN {
+  background-color: rgb(51,153,0);
+  border-top: 2 solid #000000;
+  border-left: 2 solid #000000;
+  border-right: 2 solid #000000;
+}
+
+#OverN, #SelN {
+  color: rgb(51,153,0);
+}
+
+#OverA, #SelA {
+  color: rgb(0,102,0);
+}
+
+#MasterN {
+  position: absolute;
+  top: 20px;
+  right: 130px;
+  color: rgb(51,153,0);
+}
+
+#MasterA {
+  position: absolute;
+  top: 105px;
+  right: 130px;
+  color: rgb(0,102,0);
+}
+
+#cutButton {
+  position: absolute;
+  top: 140px;
+  left: 15px;
+  width: 165px;
+  height: 25px;
+  display: block;
+  background-color: #EEEEEE;
+  border: 2 solid #000000;
+  text-align: center;
+  vertical-align: top;
+  padding-top: 7px;
+  font-weight: bold;
+}
