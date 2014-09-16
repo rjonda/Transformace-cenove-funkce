@@ -34,7 +34,8 @@ body {
   border-left: 3 solid #000000;
   border-bottom: 3 solid #000000;
   margin: 0px;
-  padding: 0px;  
+  padding: 0px;
+  cursor: crosshair;  
 }
 
 .grafColumnA, .grafColumnN {
@@ -69,6 +70,7 @@ body {
   padding: 0px;
   width: 2px;
   background-color: rgba(0,0,0,0.6);
+  cursor: crosshair;
 }
 
 #grafPointerVertical {
@@ -79,6 +81,7 @@ body {
   padding: 0px;
   height: 2px;
   background-color: rgba(0,0,0,0.6);
+  cursor: crosshair;
 }
 
 #grafSelecter {
@@ -88,6 +91,7 @@ body {
   margin: 0px;
   padding: 0px;
   background-color:  rgba(0,0,153,0.4);
+  cursor: crosshair;  
 }
 
 #masterGrafA, #masterGrafN {
@@ -149,6 +153,7 @@ body {
   vertical-align: top;
   padding-top: 7px;
   font-weight: bold;
+  cursor: pointer;
 }
 
 #pasteButton {
@@ -164,4 +169,5 @@ body {
   vertical-align: top;
   padding-top: 7px;
   font-weight: bold;
+  cursor: pointer;
 }

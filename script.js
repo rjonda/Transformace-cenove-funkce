@@ -2,79 +2,89 @@ function getData() {
   return getFileData();
 }
 
-function disableSelection(element) {                                                                //Disables selecting of an element
-  if (typeof element.onselectstart != 'undefined') {                                                //                |
-    element.onselectstart = function() { return false; };                                           //                |
-  } else if (typeof element.style.MozUserSelect != 'undefined') {                                   //                |
-    element.style.MozUserSelect = 'none';                                                           //--------------------------------
+function disableSelection(element) {
+  if (typeof element.onselectstart != 'undefined') {
+    element.onselectstart = function() { return false; };
+  } else if (typeof element.style.MozUserSelect != 'undefined') {
+    element.style.MozUserSelect = 'none';
   }
 }
 
-function resize() { //body.onResize
-  document.all["grafZone"].style.width = document.documentElement.clientWidth - 200;                //Things, which happeneds on window resize
-  document.all["grafBorder"].style.height = document.documentElement.clientHeight - 40;             //                |
-  document.all["grafBorder"].style.width = document.documentElement.clientWidth - 240;              //                |
-  document.all["grafPointer"].style.height = document.documentElement.clientHeight - 40;            //                |
-  document.all["grafPointerVertical"].style.width = document.documentElement.clientWidth - 240;     //                |
-  document.all["grafSelecter"].style.height = document.documentElement.clientHeight - 40;           //--------------------------------
+function resize() {
+  document.all["grafZone"].style.width = document.documentElement.clientWidth - 200;
+  document.all["grafBorder"].style.height = document.documentElement.clientHeight - 40;
+  document.all["grafBorder"].style.width = document.documentElement.clientWidth - 240;
+  document.all["grafPointer"].style.height = document.documentElement.clientHeight - 40;
+  document.all["grafPointerVertical"].style.width = document.documentElement.clientWidth - 240;
+  document.all["grafSelecter"].style.height = document.documentElement.clientHeight - 40;
 }
 
 var first = true;
 var scroll = 0;
 var mode = 0;
-var toMove = 0;                                                                                     //Variables and maxValue counting
-var values = getData().split(";");                                                                  //                |
-var widthOfOneColumn = 100 / values.length;                                                         //                |
-var maxValue = 0;                                                                                   //                |
-var rightSideD = 0;                                                                                 //                |
-for (var i = 0; i < values.length; i++) {                                                           //                |
-  if (parseFloat(values[i]) > maxValue) {                                                           //                |
-    maxValue = parseFloat(values[i]);                                                               //                |
-  }                                                                                                 //                |
-}                                                                                                   //--------------------------------
+var toMove = 0;
+var values = getData().split(";");
+var widthOfOneColumn = 100 / values.length;
+var maxValue = 0;
+var rightSideD = 0;
+for (var i = 0; i < values.length; i++) {
+  if (parseFloat(values[i]) > maxValue) {
+    maxValue = parseFloat(values[i]);
+  }
+}
 
 function load() { //body.onLoad  
   var masterA = 0;                                                                                  
   var masterN = 0;
-                                                                                                    //Drawing (adding and counting) columns of graf
-  for (var i = 0; i < values.length; i++) {                                                         //                |
-    var N = getActiveEnergy(maxValue, parseFloat(values[i]))                                        //                |
-    var A = parseFloat(values[i]) - N;                                                              //                |
-    masterA += A;                                                                                   //                |
-    masterN += N;                                                                                   //                |
-    var AHeight = ((A * 100) / maxValue);                                                           //                |
-    var NHeight = ((N * 100) / maxValue);                                                           //                |
-                                                                                                    //                |
+
+  for (var i = 0; i < values.length; i++) {
+    if(parseFloat(values[i]) > maxValue) {
+      for (var i = 0; i < values.length; i++) {
+        if (parseFloat(values[i]) > maxValue) {
+          maxValue = parseFloat(values[i]);
+        }
+      } 
+      document.all["grafBorder"].innerHTML = "";
+      load();
+      return;
+    }
+    var N = getActiveEnergy(maxValue, parseFloat(values[i]))
+    var A = parseFloat(values[i]) - N;
+    masterA += A;
+    masterN += N;
+    var AHeight = ((A * 100) / maxValue);
+    var NHeight = ((N * 100) / maxValue);
+
     document.all["grafBorder"].innerHTML += "<span class=\"grafColumnA\" style=\"height: " + AHeight + "%; left: " + i * widthOfOneColumn + "%; width: " + (widthOfOneColumn + 0.01) + "%;\"></span>";
     document.all["grafBorder"].innerHTML += "<span class=\"grafColumnN\" style=\"height: " + NHeight + "%; bottom: " + AHeight + "%; left: " + i * widthOfOneColumn + "%; width: " + (widthOfOneColumn + 0.01) + "%;\"></span>"
-  }                                                                                                 //                |
-  if (first) {                                                                                      //                |
+  }
+  if (first) {
     document.all["grafZone"].innerHTML = document.all["grafZone"].innerHTML + "<span id=\"grafPointer\" onMouseDown=\"down()\" onMouseUp=\"up()\" onLoad=\"disableSelection(this)\"></span>";
     document.all["grafZone"].innerHTML = document.all["grafZone"].innerHTML + "<span id=\"grafPointerVertical\" onMouseDown=\"down()\" onMouseUp=\"up()\" onLoad=\"disableSelection(this)\"></span>";
     document.all["grafZone"].innerHTML = document.all["grafZone"].innerHTML + "<span id=\"grafSelecter\"></span>";
-  }                                                                                                 //                |
-  first = false;                                                                                    //                |
-  resize();                                                                                         //                |
-  resize();                                                                                         //--------------------------------
+  }
+  first = false;
+  resize();
+  resize();
   
   var master = masterA + masterN;
   
   var heightOfMasterGrafPart = 100 / master;
   
-  document.all["masterGrafA"].style.height = heightOfMasterGrafPart * masterA;                      //Counting columns of maser graf and master values
-  document.all["masterGrafN"].style.height = heightOfMasterGrafPart * masterN;                      //                |
-  document.all["masterGrafA"].style.top = 20 + (heightOfMasterGrafPart * masterN);                  //                |
-                                                                                                    //                |
-  document.all["MasterA"].innerHTML = "<b>" + Math.round(masterA * 1000) / 1000 + "</b>";           //                |
-  document.all["MasterN"].innerHTML = "<b>" + Math.round(masterN * 1000) / 1000 + "</b>";           //--------------------------------
+  document.all["masterGrafA"].style.height = heightOfMasterGrafPart * masterA;
+  document.all["masterGrafN"].style.height = heightOfMasterGrafPart * masterN;
+  document.all["masterGrafA"].style.top = 20 + (heightOfMasterGrafPart * masterN);
+
+  document.all["MasterA"].innerHTML = "<b>" + Math.round(masterA * 1000) / 1000 + "</b>";
+  document.all["MasterN"].innerHTML = "<b>" + Math.round(masterN * 1000) / 1000 + "</b>";
   
 }
 
-var IE = document.all?true:false                                                                    //Detecting mouseMove
-if (!IE) document.captureEvents(Event.MOUSEMOVE)                                                    //                |
-document.onmousemove = move;                                                                        //                |
-var tempX = 0                                                                                       //                |
-var tempY = 0                                                                                       //--------------------------------
+var IE = document.all?true:false;
+if (!IE) document.captureEvents(Event.MOUSEMOVE);
+document.onmousemove = move;
+var tempX = 0
+var tempY = 0
 
 function move(e) {
   if (IE) {
@@ -128,16 +138,16 @@ function move(e) {
       document.all["OverA"].innerHTML = Math.round(A * 1000) / 1000;
       document.all["OverN"].innerHTML = Math.round(N * 1000) / 1000;
     }
-    document.all["grafPointer"].style.left = tempX;
+    document.all["grafPointer"].style.left = tempX - 1;
     document.all["grafPointerVertical"].style.top = document.documentElement.clientHeight - 20;
     
   } else if(mode == 1) {
     if (tempX < 20 || tempX >= document.documentElement.clientWidth - 220 || tempY < 20 || tempY >= document.documentElement.clientHeight - 20) {
       tempY = document.documentElement.clientHeight - 20;
-      document.all["grafPointerVertical"].style.top = tempY;
+      document.all["grafPointerVertical"].style.top = tempY - 1;
       document.all["grafPointer"].style.left = 18;
     } else {
-      document.all["grafPointerVertical"].style.top = tempY;
+      document.all["grafPointerVertical"].style.top = tempY - 1;
       document.all["grafPointer"].style.left = 18;
     }
   }
