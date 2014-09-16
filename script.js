@@ -146,9 +146,42 @@ function move(e) {
 }
 
 function cut() {
-  mode = 1;
-  document.all["OverA"].innerHTML = "N/A";
-  document.all["OverN"].innerHTML = "N/A";
+  if (document.all["SelA"].innerHTML == "N/A") {
+    window.alert("Nic není vybráno!")
+  } else {
+    mode = 1;
+    document.all["cutButton"].style.display = "none";
+    document.all["pasteButton"].style.display = "none";
+    document.all["OverA"].innerHTML = "N/A";
+    document.all["OverN"].innerHTML = "N/A";
+  }
+}
+
+function paste() {
+  if (document.all["SelA"].innerHTML == "N/A") {
+    window.alert("Nic není vybráno!")
+  } else {
+    var countOfColumnsInside = 0;
+    for (var i = 0; i < values.length; i++) {
+      var PixXL = i * ((document.documentElement.clientWidth - 240) / values.length) + 20;
+      var PixXR = (i + 1) * ((document.documentElement.clientWidth - 240) / values.length) + 20;
+      if (((leftSide <= rightSideD) && ((Math.round(PixXL * 10000) / 10000 >= Math.round(leftSide * 10000) / 10000) && (Math.round(PixXR * 10000) / 10000 <= Math.round(rightSideD * 10000) / 10000))) || ((leftSide >= rightSideD) && ((Math.round(PixXL * 10000) / 10000 >= Math.round(rightSideD * 10000) / 10000) && (Math.round(PixXR * 10000) / 10000 <= Math.round(leftSide * 10000) / 10000)))) {
+        countOfColumnsInside+=1;
+      }
+    }
+    for (var i = 0; i < values.length; i++) {
+      var PixXL = i * ((document.documentElement.clientWidth - 240) / values.length) + 20;
+      var PixXR = (i + 1) * ((document.documentElement.clientWidth - 240) / values.length) + 20;
+      if (((leftSide <= rightSideD) && ((Math.round(PixXL * 10000) / 10000 >= Math.round(leftSide * 10000) / 10000) && (Math.round(PixXR * 10000) / 10000 <= Math.round(rightSideD * 10000) / 10000))) || ((leftSide >= rightSideD) && ((Math.round(PixXL * 10000) / 10000 >= Math.round(rightSideD * 10000) / 10000) && (Math.round(PixXR * 10000) / 10000 <= Math.round(leftSide * 10000) / 10000)))) {
+        values[i] = parseFloat(values[i]) + (toMove / countOfColumnsInside);
+      }
+    }
+    document.all["Cuted"].innerHTML = "N/A";
+    document.all["cutButton"].style.display = "block";
+    document.all["pasteButton"].style.display = "none";
+    document.all["grafBorder"].innerHTML = "";
+    load();
+  }
 }
 
 function getIdFromCoordinates(tempX, widthOfOneColumn) {
@@ -178,27 +211,6 @@ function up() {
   console.log(mode);
   if (mode == 0 || mode == 2) {
     isdown = false;
-  } else if (mode == 4) {
-    isdown = false;
-    var countOfColumnsInside = 0;
-    for (var i = 0; i < values.length; i++) {
-      var PixXL = i * ((document.documentElement.clientWidth - 240) / values.length) + 20;
-      var PixXR = (i + 1) * ((document.documentElement.clientWidth - 240) / values.length) + 20;
-      if (((leftSide <= rightSideD) && ((Math.round(PixXL * 10000) / 10000 >= Math.round(leftSide * 10000) / 10000) && (Math.round(PixXR * 10000) / 10000 <= Math.round(rightSideD * 10000) / 10000))) || ((leftSide >= rightSideD) && ((Math.round(PixXL * 10000) / 10000 >= Math.round(rightSideD * 10000) / 10000) && (Math.round(PixXR * 10000) / 10000 <= Math.round(leftSide * 10000) / 10000)))) {
-        countOfColumnsInside+=1;
-      }
-    }
-    for (var i = 0; i < values.length; i++) {
-      var PixXL = i * ((document.documentElement.clientWidth - 240) / values.length) + 20;
-      var PixXR = (i + 1) * ((document.documentElement.clientWidth - 240) / values.length) + 20;
-      if (((leftSide <= rightSideD) && ((Math.round(PixXL * 10000) / 10000 >= Math.round(leftSide * 10000) / 10000) && (Math.round(PixXR * 10000) / 10000 <= Math.round(rightSideD * 10000) / 10000))) || ((leftSide >= rightSideD) && ((Math.round(PixXL * 10000) / 10000 >= Math.round(rightSideD * 10000) / 10000) && (Math.round(PixXR * 10000) / 10000 <= Math.round(leftSide * 10000) / 10000)))) {
-        values[i] = parseFloat(values[i]) + (toMove / countOfColumnsInside);
-      }
-    }
-    mode = 0;
-    document.all["grafSelecter"].style.backgroundColor="rgba(0,0,153,0.4)";
-    document.all["grafBorder"].innerHTML = "";
-    load();
   }
 }
 
@@ -213,14 +225,6 @@ function down() {
       document.all["SelA"].innerHTML = "N/A";
       document.all["SelN"].innerHTML = "N/A";
       isdown = true;
-      if (mode == 2) {
-        mode = 3;
-        document.all["grafSelecter"].style.backgroundColor="rgba(153,0,0,0.4)";
-      }
-      if (mode == 3) {
-        mode = 4;
-        document.all["grafSelecter"].style.backgroundColor="rgba(153,0,0,0.4)";
-      }
     } else if (mode == 1) {
       toMove = 0;
       var clickedValue = (maxValue - (maxValue * ((tempY - 20) / (document.documentElement.clientHeight - 40)))); 
@@ -237,12 +241,23 @@ function down() {
           }
         }
       }
+      document.all["Cuted"].innerHTML = Math.round(toMove * 1000) / 1000;
       document.all["grafBorder"].innerHTML = "";
       load();
-      mode = 2;
+      mode = 0;
+      document.all["cutButton"].style.display = "none";
+      document.all["pasteButton"].style.display = "block";
     }
   }
   return false;
+}
+
+function buttonOverOut(obj, num) {
+  if (num < 0) {
+    obj.style.backgroundColor = '#EEEEEE';
+  } else if (num > 0) {
+    obj.style.backgroundColor = '#999999';
+  }
 }
 
 if (document.addEventListener) {
