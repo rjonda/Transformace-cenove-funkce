@@ -1,5 +1,5 @@
 function getActiveEnergy(maxValue, value) {
-  return 0.6 * value * Math.atan(10 * value / maxValue);
+  return value - (0.6 * value * Math.atan(10 * value / maxValue));
 }
 
 function getFileData() {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     //

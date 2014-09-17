@@ -38,7 +38,7 @@ function load() { //body.onLoad
   var masterN = 0;
 
   for (var i = 0; i < values.length; i++) {
-    if(parseFloat(values[i]) > maxValue) {
+/*    if(parseFloat(values[i]) > maxValue) {
       for (var i = 0; i < values.length; i++) {
         if (parseFloat(values[i]) > maxValue) {
           maxValue = parseFloat(values[i]);
@@ -47,7 +47,7 @@ function load() { //body.onLoad
       document.all["grafBorder"].innerHTML = "";
       load();
       return;
-    }
+    }  */
     var N = getActiveEnergy(maxValue, parseFloat(values[i]))
     var A = parseFloat(values[i]) - N;
     masterA += A;
