@@ -17,6 +17,12 @@ function resize() {
   document.all["grafPointer"].style.height = document.documentElement.clientHeight - 40;
   document.all["grafPointerVertical"].style.width = document.documentElement.clientWidth - 240;
   document.all["grafSelecter"].style.height = document.documentElement.clientHeight - 40;
+  //document.all["alert"].style.top = (document.documentElement.clientHeight - 400) / 2;
+  //document.all["alert"].style.left = (document.documentElement.clientWidth - 600) / 2;
+  for (var pocitadlo = 1; pocitadlo <= (maxValue / 10); pocitadlo++) {
+    document.all["VerticalLine" + pocitadlo].style.bottom = ((document.documentElement.clientHeight - 40) / (maxValue / 10)) * pocitadlo;
+    document.all["VerticalLine" + pocitadlo].style.width = document.documentElement.clientWidth - 240;
+  }
 }
 
 var first = true;
@@ -25,13 +31,13 @@ var mode = 0;
 var toMove = 0;
 var values = getData().split(";");
 var widthOfOneColumn = 100 / values.length;
-var maxValue = 0;
+var maxValue = 300;
 var rightSideD = 0;
-for (var i = 0; i < values.length; i++) {
-  if (parseFloat(values[i]) > maxValue) {
-    maxValue = parseFloat(values[i]);
-  }
-}
+//for (var i = 0; i < values.length; i++) {
+//  if (parseFloat(values[i]) > maxValue) {
+//    maxValue = parseFloat(values[i]);
+//  }
+//}
 
 function load() { //body.onLoad  
   var masterA = 0;                                                                                  
@@ -48,7 +54,7 @@ function load() { //body.onLoad
       load();
       return;
     }  */
-    var N = getActiveEnergy(maxValue, parseFloat(values[i]))
+    var N = getOverallLvLosses(parseFloat(values[i]))
     var A = parseFloat(values[i]) - N;
     masterA += A;
     masterN += N;
@@ -57,6 +63,13 @@ function load() { //body.onLoad
 
     document.all["grafBorder"].innerHTML += "<span class=\"grafColumnA\" style=\"height: " + AHeight + "%; left: " + i * widthOfOneColumn + "%; width: " + (widthOfOneColumn + 0.01) + "%;\"></span>";
     document.all["grafBorder"].innerHTML += "<span class=\"grafColumnN\" style=\"height: " + NHeight + "%; bottom: " + AHeight + "%; left: " + i * widthOfOneColumn + "%; width: " + (widthOfOneColumn + 0.01) + "%;\"></span>"
+  }
+  for (var pocitadlo = 1; pocitadlo <= (maxValue / 10); pocitadlo++) {
+    if (pocitadlo % 10 == 0) {
+      document.all["grafBorder"].innerHTML = document.all["grafBorder"].innerHTML + "<span class=\"grafLineVerticalStrong3\" id=\"VerticalLine" + pocitadlo + "\">" + pocitadlo * 10 + "</span>";
+    } else {
+      document.all["grafBorder"].innerHTML = document.all["grafBorder"].innerHTML + "<span class=\"grafLineVerticalStrong1\" id=\"VerticalLine" + pocitadlo + "\"></span>";
+    }
   }
   if (first) {
     document.all["grafZone"].innerHTML = document.all["grafZone"].innerHTML + "<span id=\"grafPointer\" onMouseDown=\"down()\" onMouseUp=\"up()\" onLoad=\"disableSelection(this)\"></span>";
@@ -119,7 +132,7 @@ function move(e) {
       var SelN = 0;
 
       for (var i = iL; i < iR; i++) {
-        var N2 = getActiveEnergy(maxValue, parseFloat(values[i]));
+        var N2 = getOverallLvLosses(parseFloat(values[i]));
         var A2 = parseFloat(values[i]) - N2;
         SelA += A2;
         SelN += N2;
@@ -133,7 +146,7 @@ function move(e) {
       document.all["OverN"].innerHTML = "N/A";
     } else {
       var id = getIdFromCoordinates (tempX, widthOfOneColumn);
-      var N = getActiveEnergy(maxValue, parseFloat(values[id]));
+      var N = getOverallLvLosses(parseFloat(values[id]));
       var A = parseFloat(values[id]) - N;
       document.all["OverA"].innerHTML = Math.round(A * 1000) / 1000;
       document.all["OverN"].innerHTML = Math.round(N * 1000) / 1000;
@@ -172,11 +185,13 @@ function paste() {
     window.alert("Nic není vybráno!")
   } else {
     var countOfColumnsInside = 0;
+    
     for (var i = 0; i < values.length; i++) {
       var PixXL = i * ((document.documentElement.clientWidth - 240) / values.length) + 20;
       var PixXR = (i + 1) * ((document.documentElement.clientWidth - 240) / values.length) + 20;
       if (((leftSide <= rightSideD) && ((Math.round(PixXL * 10000) / 10000 >= Math.round(leftSide * 10000) / 10000) && (Math.round(PixXR * 10000) / 10000 <= Math.round(rightSideD * 10000) / 10000))) || ((leftSide >= rightSideD) && ((Math.round(PixXL * 10000) / 10000 >= Math.round(rightSideD * 10000) / 10000) && (Math.round(PixXR * 10000) / 10000 <= Math.round(leftSide * 10000) / 10000)))) {
         countOfColumnsInside+=1;
+        
       }
     }
     for (var i = 0; i < values.length; i++) {
@@ -218,14 +233,12 @@ var isdown = false;
 var leftSide = 0;
 
 function up() {
-  console.log(mode);
   if (mode == 0 || mode == 2) {
     isdown = false;
   }
 }
 
 function down() {
-  console.log(mode);
   if (!(tempX < 20 || tempX >= document.documentElement.clientWidth - 220 || tempY < 20 || tempY >= document.documentElement.clientHeight - 20)) {
     if (mode == 0 || mode == 2 || mode == 3) {
       leftSide = roundCoordinates(getCoordinateFromId (tempX, widthOfOneColumn, -1), widthOfOneColumn);
