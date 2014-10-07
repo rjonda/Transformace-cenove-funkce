@@ -11,9 +11,9 @@ function getTransformationLosses( p, q ) {
 }
 
 function getTransformationLosses( s ) {
-  var p_0 = 0;      // ztraty naprazdno = zatim 0 %
-  var s_n = 300;    // zdanlivy vykon transformatoru = 300 kW
-  var p_k = 0.03 * s_n;   // maximalni ztraty vznikle transformaci = 5 %
+  var p_0 = 0.84;     // ztraty naprazdno = zatim 0 %
+  var s_n = 400;      // zdanlivy vykon transformatoru = 300 kW
+  var p_k = 7.7;      // maximalni ztraty vznikle transformaci = 5 %
   
   return p_0 + p_k * Math.pow( s / s_n, 2 );
 }
@@ -23,10 +23,10 @@ function getLvTransitionLosses( p, q ) {
 }
 
 function getLvTransitionLosses( s ) {
-  var r = 0.00004;      // odpor stanoven fixne na 0.7 ohmu
+  var r = 0.04;      // odpor stanoven fixne na 0.00004 ohmu; 0.04
   var u = 400;      // trifazove souctove = 400 V
   
-  return r * Math.pow( s * 1000 / u, 2 );
+  return r * Math.pow( s * 1000 / u, 2 ) / 1000;
 }
 
 function getS( p, q ) {
