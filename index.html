@@ -4,12 +4,14 @@
       Graf viewer
     </title>
     <link rel="stylesheet" type="text/css" href="./style.css">
+    <link rel="icon" type="image/ico" href="Images/favicon.ico" />
     <script src="./vzorec.js"></script>
     <script src="./script.js"></script>
+    <script src="./disableSelection.js"></script>
     <meta charset="utf-8">
   </head>
-  <body onResize="resize(); resize();" onLoad="load()">
-    <span id="grafZone" onMouseDown="down()" onMouseUp="up()">
+  <body onResize="resizeDouble()" onLoad="load()">
+    <span id="grafZone" onMouseDown="down(event);" onMouseUp="up(event)">
       <span id="grafBorder">
       </span>  
     </span>
@@ -18,11 +20,23 @@
       <span id="masterGrafN"></span>
       <span id="MasterA">N/A</span>
       <span id="MasterN">N/A</span>
+      <span id="MasterP">N/A</span>
+      <p style="position: absolute; left: 10px; top: 270px; width: 160px; text-align: center;"><b>Nové</b></p>
+      
+      <span id="masterGrafOldA"></span>
+      <span id="masterGrafOldN"></span>
+      <span id="MasterOldA">N/A</span>
+      <span id="MasterOldN">N/A</span>
+      <span id="MasterOldP">N/A</span>
+      <p style="position: absolute; left: 10px; top: 0px; width: 160px; text-align: center;"><b>Původní</b></p>
+      
+      <span class="separator" style="position: absolute; left: 0px; top: 320px;"></span>
+      
       <span id="cutButton" onMouseOver="buttonOverOut(this, 1)" onMouseOut="buttonOverOut(this, -1)" onClick="cut();">Vyjmout spotřebu <img src="images/cut.png" height="20"></span>
       <span id="pasteButton" style="display:none" onMouseOver="buttonOverOut(this, 2)" onMouseOut="buttonOverOut(this, -2)" onClick="paste();">Vložit spotřebu <img src="images/paste.png" height="20"></span>
-      <p style="position: absolute; left: 10px; top: 180px;"><b>Vyjmuto: <br><span id="Cuted">N/A</span></b></p>
-      <p style="position: absolute; left: 10px; top: 220px;"><b>Najeto: <br><span id="OverA">N/A</span>/<span id="OverN">N/A</span></b></p>
-      <p style="position: absolute; left: 10px; top: 260px;"><b>Vybráno: <br><span id="SelA">N/A</span>/<span id="SelN">N/A</span></b></p>
+      <p style="position: absolute; left: 10px; top: 400px;"><b>Vyjmuto: <br><span id="Cuted">N/A</span></b></p>
+      <p style="position: absolute; left: 10px; top: 440px;"><b>Najeto: <br><span id="OverA">N/A</span>/<span id="OverN">N/A</span></b></p>
+      <p style="position: absolute; left: 10px; top: 480px;"><b>Vybráno: <br><span id="SelA">N/A</span>/<span id="SelN">N/A</span></b></p>
     </span>
     <!--<span id="dark">
       <span id="alert">

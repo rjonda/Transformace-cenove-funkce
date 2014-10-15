@@ -2,6 +2,11 @@ function getData() {
   return getFileData();
 }
 
+function resizeDouble() {
+  resize();
+  resize();
+}
+
 function disableSelection(element) {
   if (typeof element.onselectstart != 'undefined') {
     element.onselectstart = function() { return false; };
@@ -25,6 +30,9 @@ function resize() {
   }
 }
 
+var oldA = 0;
+var oldN = 0;
+
 var first = true;
 var scroll = 0;
 var mode = 0;
@@ -39,7 +47,7 @@ var rightSideD = 0;
 //  }
 //}
 
-function load() { //body.onLoad  
+function load() {
   var masterA = 0;                                                                                  
   var masterN = 0;
 
@@ -72,24 +80,35 @@ function load() { //body.onLoad
     }
   }
   if (first) {
-    document.all["grafZone"].innerHTML = document.all["grafZone"].innerHTML + "<span id=\"grafPointer\" onMouseDown=\"down()\" onMouseUp=\"up()\" onLoad=\"disableSelection(this)\"></span>";
-    document.all["grafZone"].innerHTML = document.all["grafZone"].innerHTML + "<span id=\"grafPointerVertical\" onMouseDown=\"down()\" onMouseUp=\"up()\" onLoad=\"disableSelection(this)\"></span>";
     document.all["grafZone"].innerHTML = document.all["grafZone"].innerHTML + "<span id=\"grafSelecter\"></span>";
+    document.all["grafZone"].innerHTML = document.all["grafZone"].innerHTML + "<span id=\"grafPointer\" onMouseDown=\"down(event)\" onMouseUp=\"up(event)\" onLoad=\"disableSelection(this)\"></span>";
+    document.all["grafZone"].innerHTML = document.all["grafZone"].innerHTML + "<span id=\"grafPointerVertical\" onMouseDown=\"down(event)\" onMouseUp=\"up(event)\" onLoad=\"disableSelection(this)\"></span>";
+    oldA = masterA;
+    oldN = masterN;
   }
   first = false;
   resize();
   resize();
   
-  var master = masterA + masterN;
+  var master = oldA + oldN;
   
-  var heightOfMasterGrafPart = 100 / master;
+  var widthOfMasterGrafPart = 165 / master;
   
-  document.all["masterGrafA"].style.height = heightOfMasterGrafPart * masterA;
-  document.all["masterGrafN"].style.height = heightOfMasterGrafPart * masterN;
-  document.all["masterGrafA"].style.top = 20 + (heightOfMasterGrafPart * masterN);
+  document.all["masterGrafOldA"].style.width = widthOfMasterGrafPart * oldA;
+  document.all["masterGrafOldN"].style.width = widthOfMasterGrafPart * oldN;
+  document.all["masterGrafOldA"].style.left = 15 + (widthOfMasterGrafPart * oldN);
+
+  document.all["MasterOldA"].innerHTML = "<b>" + Math.round(oldA * 1000) / 1000 + "</b>";
+  document.all["MasterOldN"].innerHTML = "<b>" + Math.round(oldN * 1000) / 1000 + "</b>";
+  document.all["MasterOldP"].innerHTML = "<b>" + Math.round((oldN / master) * 100000) / 1000 + "%</b>";
+  
+  document.all["masterGrafA"].style.width = widthOfMasterGrafPart * masterA;
+  document.all["masterGrafN"].style.width = widthOfMasterGrafPart * masterN;
+  document.all["masterGrafA"].style.left = 15 + (widthOfMasterGrafPart * masterN);
 
   document.all["MasterA"].innerHTML = "<b>" + Math.round(masterA * 1000) / 1000 + "</b>";
   document.all["MasterN"].innerHTML = "<b>" + Math.round(masterN * 1000) / 1000 + "</b>";
+  document.all["MasterP"].innerHTML = "<b>" + Math.round((masterN / master) * 100000) / 1000 + "%</b>";
   
 }
 
@@ -232,45 +251,52 @@ function roundCoordinates(coord, widthOfOneColumn) {
 var isdown = false;
 var leftSide = 0;
 
-function up() {
-  if (mode == 0 || mode == 2) {
-    isdown = false;
+function up(e) {
+  if (e.which == 1) {
+    if (mode == 0 || mode == 2) {
+      isdown = false;
+    }
   }
 }
 
-function down() {
-  if (!(tempX < 20 || tempX >= document.documentElement.clientWidth - 220 || tempY < 20 || tempY >= document.documentElement.clientHeight - 20)) {
-    if (mode == 0 || mode == 2 || mode == 3) {
-      leftSide = roundCoordinates(getCoordinateFromId (tempX, widthOfOneColumn, -1), widthOfOneColumn);
-      rightSideD = leftSide;
-      document.all["grafSelecter"].style.left = leftSide;
-      document.all["grafSelecter"].style.width = 0;
-      document.all["SelA"].innerHTML = "N/A";
-      document.all["SelN"].innerHTML = "N/A";
-      isdown = true;
-    } else if (mode == 1) {
-      toMove = 0;
-      var clickedValue = (maxValue - (maxValue * ((tempY - 20) / (document.documentElement.clientHeight - 40)))); 
-      for (var i = 0; i < values.length; i++) {
-        var PixXL = i * ((document.documentElement.clientWidth - 240) / values.length) + 20;
-        var PixXR = (i + 1) * ((document.documentElement.clientWidth - 240) / values.length) + 20;
-        if (((leftSide <= rightSideD) && ((Math.round(PixXL * 10000) / 10000 >= Math.round(leftSide * 10000) / 10000) && (Math.round(PixXR * 10000) / 10000 <= Math.round(rightSideD * 10000) / 10000))) || ((leftSide >= rightSideD) && ((Math.round(PixXL * 10000) / 10000 >= Math.round(rightSideD * 10000) / 10000) && (Math.round(PixXR * 10000) / 10000 <= Math.round(leftSide * 10000) / 10000)))) {
-          if(clickedValue > values[i]) {
-            toMove += parseFloat(values[i]);
-            values[i] = 0;
-          } else {
-            toMove += clickedValue;
-            values[i] = parseFloat(values[i]) - clickedValue;
+function down(e) {
+  e = e || window.event;
+  if (e.which == 1) {
+    if (!(tempX < 20 || tempX >= document.documentElement.clientWidth - 220 || tempY < 20 || tempY >= document.documentElement.clientHeight - 20)) {
+      if (mode == 0 || mode == 2 || mode == 3) {
+        leftSide = roundCoordinates(getCoordinateFromId (tempX, widthOfOneColumn, -1), widthOfOneColumn);
+        rightSideD = leftSide;
+        document.all["grafSelecter"].style.left = leftSide;
+        document.all["grafSelecter"].style.width = 0;
+        document.all["SelA"].innerHTML = "N/A";
+        document.all["SelN"].innerHTML = "N/A";
+        isdown = true;
+      } else if (mode == 1) {
+        toMove = 0;
+        var clickedValue = (maxValue - (maxValue * ((tempY - 20) / (document.documentElement.clientHeight - 40)))); 
+        for (var i = 0; i < values.length; i++) {
+          var PixXL = i * ((document.documentElement.clientWidth - 240) / values.length) + 20;
+          var PixXR = (i + 1) * ((document.documentElement.clientWidth - 240) / values.length) + 20;
+          if (((leftSide <= rightSideD) && ((Math.round(PixXL * 10000) / 10000 >= Math.round(leftSide * 10000) / 10000) && (Math.round(PixXR * 10000) / 10000 <= Math.round(rightSideD * 10000) / 10000))) || ((leftSide >= rightSideD) && ((Math.round(PixXL * 10000) / 10000 >= Math.round(rightSideD * 10000) / 10000) && (Math.round(PixXR * 10000) / 10000 <= Math.round(leftSide * 10000) / 10000)))) {
+            if(clickedValue > values[i]) {
+              toMove += parseFloat(values[i]);
+              values[i] = 0;
+            } else {
+              toMove += clickedValue;
+              values[i] = parseFloat(values[i]) - clickedValue;
+            }
           }
         }
+        document.all["Cuted"].innerHTML = Math.round(toMove * 1000) / 1000;
+        document.all["grafBorder"].innerHTML = "";
+        load();
+        mode = 0;
+        document.all["cutButton"].style.display = "none";
+        document.all["pasteButton"].style.display = "block";
       }
-      document.all["Cuted"].innerHTML = Math.round(toMove * 1000) / 1000;
-      document.all["grafBorder"].innerHTML = "";
-      load();
-      mode = 0;
-      document.all["cutButton"].style.display = "none";
-      document.all["pasteButton"].style.display = "block";
     }
+  } else {
+    showMenu();
   }
   return false;
 }
@@ -283,24 +309,16 @@ function buttonOverOut(obj, num) {
   }
 }
 
+function showMenu() {
+  
+}
+
 if (document.addEventListener) {
   document.addEventListener('contextmenu', function(e) {
-    up();
-    leftSide = 0;
-    document.all["grafSelecter"].style.left = leftSide;
-    document.all["grafSelecter"].style.width = 0;
-    document.all["SelA"].innerHTML = "N/A";
-    document.all["SelN"].innerHTML = "N/A";
     e.preventDefault();
   }, false);
 } else {
   document.attachEvent('oncontextmenu', function() {
-    up();
-    leftSide = 0;
-    document.all["grafSelecter"].style.left = leftSide;
-    document.all["grafSelecter"].style.width = 0;
-    document.all["SelA"].innerHTML = "N/A";
-    document.all["SelN"].innerHTML = "N/A";
     window.event.returnValue = false;
   });
 }
