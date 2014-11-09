@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Graf viewer
+    </title>
+    <link rel="stylesheet" type="text/css" href="./style.css">
+    <link rel="icon" type="image/ico" href="Images/favicon.ico" />
+    <script type="text/javascript" src="./vzorec.js"></script>
+    <script type="text/javascript" src="./script.js"></script>
+    <script type="text/javascript" src="./disableSelection.js"></script>
+    <meta charset="utf-8">
+  </head>
+  <body onResize="resizeDouble()" onLoad="load()" onMouseUp="mouseUp(this)">
+    <div id="right_sider">
+      <p style="text-align: center;"><b>Původní hodnoty</b></p>
+      <div id="sumGraph">
+        <div id="sumGraph_graph_a_old"></div>
+        <div id="sumGraph_graph_n_old"></div>
+        <div id="sumGraph_graph_a_new"></div>
+        <div id="sumGraph_graph_n_new"></div>
+        
+        <div id="sumGraph_a_old">N/A</div>
+        <div id="sumGraph_n_old">N/A</div>
+        <div id="sumGraph_a_new">N/A</div>
+        <div id="sumGraph_n_new">N/A</div>
+      </div>
+      <p style="margin-top: 60px; text-align: center;"><b>Nové hodnoty</b></p>
+      <div id="boiler_list">
+        <!--<div id="123_menu" class="menu" style="top: 0px; background: #000000; color: #FFFFFF;">ID: 123</div>-->
+      </div>
+    </div>
+    <div id="graph" onMouseUp="mouseUp(this)">
+      <!--<div id="a_0" class="0">
+        <div class="col_a" style="bottom: 0%; left: 0%; width: 5%; height: 45%">
+        </div>
+      </div>
+      <div id="n_0" class="0">
+        <div class="col_n" style="bottom: 45%; left: 0%; width: 5%; height: 15%">
+        </div>
+      </div>-->
+      <div id="left_bottom_corner"></div>
+      <div id="selecter"></div>  
+    </div>
+    <div id="data">
+       
+    </div>
+    <span id="dark">
+      <span id="alert">
+        <form>
+          <p>
+            <input type="radio" checked="true" name="InputType" id="InputType-ClassicData" onChange="switchAlert(this)"> Použít vzorová data
+          </p>
+          <p>
+            <input type="radio" name="InputType" id="InputType-OwnData" onChange="switchAlert(this)"> Vložit vlastní data
+          </p>
+          <span class="moreOptions" id="GrafData-Label" style="padding-left: 40px; width: 150px; display: none; height: 20px;">
+            Data grafu: <span></span><br>&nbsp
+          </span>
+          <span class="moreOptions" style="padding-left: 0px; width: 350px; display: none; height: 50px;">
+            <textarea id="GrafData" style="width: 350px;"></textarea>
+          </span>
+          <span class="moreOptions" id="BoilerData-Label" style="padding-left: 40px; width: 150px; display: none; height: 20px;">
+            Data bojlerů: <span></span><br>&nbsp
+          </span>
+          <span class="moreOptions" style="padding-left: 0px; width: 350px; display: none; height: 50px;">
+            <textarea id="BoilerData" style="width: 350px;"></textarea>
+          </span>
+          <span class="moreOptions" id="TrafoData-Label" style="padding-left: 40px; width: 150px; display: none; height: 20px;">
+            Kapacita transformátoru: <span></span>
+          </span>
+          <span class="moreOptions" style="padding-left: 0px; width: 350px; display: none; height: 50px;">
+            <input type="text" id="TrafoData" style="width: 100px;"> kW
+          </span>
+        </form>
+        <p align="right" style="position: absolute; bottom: 0px; right: 25px;">
+          <span class="button" onMouseOver="buttonOverOut(this, 1)" onMouseOut="buttonOverOut(this, -1)" onClick="go();">Spustit</span>
+        </p>
+      </span>
+    </span>
+  </body>
+</html>

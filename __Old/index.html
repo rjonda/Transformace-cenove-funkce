@@ -1,0 +1,76 @@
+<html>
+  <head>
+    <title>
+      Graf viewer
+    </title>
+    <link rel="stylesheet" type="text/css" href="./style.css">
+    <link rel="icon" type="image/ico" href="Images/favicon.ico" />
+    <script src="./vzorec.js"></script>
+    <script src="./script.js"></script>
+    <script src="./disableSelection.js"></script>
+    <meta charset="utf-8">
+  </head>
+  <body onResize="resizeDouble()" onLoad="firstLoad()">
+    <span id="grafZone" onMouseDown="down(event);" onMouseUp="up(event)">
+      <span id="grafBorder">
+      </span>  
+    </span>
+    <span id="menuZone">
+      <span id="masterGrafA"></span>
+      <span id="masterGrafN"></span>
+      <span id="MasterA">N/A</span>
+      <span id="MasterN">N/A</span>
+      <span id="MasterP">N/A</span>
+      <p style="position: absolute; left: 10px; top: 190px; width: 160px; text-align: center;"><b>Nové</b></p>
+      
+      <span id="masterGrafOldA"></span>
+      <span id="masterGrafOldN"></span>
+      <span id="MasterOldA">N/A</span>
+      <span id="MasterOldN">N/A</span>
+      <span id="MasterOldP">N/A</span>
+      <p style="position: absolute; left: 10px; top: 0px; width: 160px; text-align: center;"><b>Původní</b></p>
+      
+      <span class="separator" style="position: absolute; left: 0px; top: 240px;"></span>
+      
+      <span id="cutButton" class="button" onMouseOver="buttonOverOut(this, 1)" onMouseOut="buttonOverOut(this, -1)" onClick="cut();">Vyjmout spotřebu</span>
+      <span id="pasteButton" class="button" style="display:none" onMouseOver="buttonOverOut(this, 2)" onMouseOut="buttonOverOut(this, -2)" onClick="paste();">Vložit spotřebu</span>
+      <p style="position: absolute; left: 10px; top: 300px;"><b>Vyjmuto: <br><span id="Cuted">N/A</span></b></p>
+      <p style="position: absolute; left: 10px; top: 340px;"><b>Najeto: <br><span id="OverA">N/A</span>/<span id="OverN">N/A</span></b></p>
+      <p style="position: absolute; left: 10px; top: 380px;"><b>Vybráno: <br><span id="SelA">N/A</span>/<span id="SelN">N/A</span></b></p>
+    </span>
+    <span id="dark">
+      <span id="alert">
+        <form>
+          <p>
+            <input type="radio" checked="true" name="InputType" id="InputType-ClassicData" onChange="switchAlert(this)"> Použít vzorová data
+          </p>
+          <p>
+            <input type="radio" name="InputType" id="InputType-OwnData" onChange="switchAlert(this)"> Vložit vlastní data
+          </p>
+          <span class="moreOptions" id="GrafData-Label" style="padding-left: 40px; width: 150px; display: none; height: 20px;">
+            Data grafu: <span></span><br>&nbsp
+          </span>
+          <span class="moreOptions" style="padding-left: 0px; width: 350px; display: none; height: 50px;">
+            <textarea id="GrafData" style="width: 350px;"></textarea>
+          </span>
+          <span class="moreOptions" id="BoilerData-Label" style="padding-left: 40px; width: 150px; display: none; height: 20px;">
+            Data bojlerů: <span></span><br>&nbsp
+          </span>
+          <span class="moreOptions" style="padding-left: 0px; width: 350px; display: none; height: 50px;">
+            <textarea id="BoilerData" style="width: 350px;"></textarea>
+          </span>
+          <span class="moreOptions" id="TrafoData-Label" style="padding-left: 40px; width: 150px; display: none; height: 20px;">
+            Kapacita transformátoru: <span></span>
+          </span>
+          <span class="moreOptions" style="padding-left: 0px; width: 350px; display: none; height: 50px;">
+            <input type="text" id="TrafoData" style="width: 100px;"> kW
+          </span>
+        </form>
+        <p align="right" style="position: absolute; bottom: 0px; right: 25px;">
+          <span class="button" onMouseOver="buttonOverOut(this, 1)" onMouseOut="buttonOverOut(this, -1)" onClick="go();">Spustit</span>
+        </p>
+      </span>
+    </span>
+    <span id="loading">&nbsp<span>
+  </body>
+</html>
