@@ -126,6 +126,12 @@ function load() {
   document.getElementById("sumGraph_graph_a_old").style.width = ((100 * sumA) / (sumA + sumN)) + "%";
   document.getElementById("sumGraph_graph_n_old").style.width = ((100 * sumN) / (sumA + sumN)) + "%";
   
+  document.getElementById("sumGraph_a_new").innerHTML = Math.round(sumA * 1000) / 1000;
+  document.getElementById("sumGraph_n_new").innerHTML = Math.round(sumN * 1000) / 1000;
+  
+  document.getElementById("sumGraph_graph_a_new").style.width = ((100 * sumA) / (sumA + sumN)) + "%";
+  document.getElementById("sumGraph_graph_n_new").style.width = ((100 * sumN) / (sumA + sumN)) + "%";
+  
   resizeDouble();
 }
 
