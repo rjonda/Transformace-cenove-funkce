@@ -40,14 +40,16 @@ function resize() {
   document.getElementById("graph").style.top = (margin) + "px";
   document.getElementById("graph").style.left = (margin) + "px";
   
-  document.getElementById("alert").style.top = (document.documentElement.clientHeight - 400) / 2;
-  document.getElementById("alert").style.left = (document.documentElement.clientWidth - 600) / 2;
+  document.getElementById("alert").style.top = (document.documentElement.clientHeight - 400) / 2 + "px";
+  document.getElementById("alert").style.left = (document.documentElement.clientWidth - 600) / 2 + "px";
 }
 
 function load() {
-  document.getElementById("dark").style.display = "none";
-  document.getElementById("alert").style.display = "none";
   
+  document.getElementById("graph").innerHTML = "";
+  document.getElementById("boiler_list").innerHTML = "";
+  document.getElementById("data").innerHTML = "";
+    
   var boiler_number_total = -1;
   
   var widthOfOneCol = 100 / data.length;
@@ -120,14 +122,14 @@ function load() {
     sumN += N;
   }
   
-  document.getElementById("sumGraph_a_old").innerHTML = Math.round(sumA * 1000) / 1000;
-  document.getElementById("sumGraph_n_old").innerHTML = Math.round(sumN * 1000) / 1000;
+  document.getElementById("sumGraph_a_old").innerHTML = sumA.toFixed(3);
+  document.getElementById("sumGraph_n_old").innerHTML = sumN.toFixed(3);
   
   document.getElementById("sumGraph_graph_a_old").style.width = ((100 * sumA) / (sumA + sumN)) + "%";
   document.getElementById("sumGraph_graph_n_old").style.width = ((100 * sumN) / (sumA + sumN)) + "%";
   
-  document.getElementById("sumGraph_a_new").innerHTML = Math.round(sumA * 1000) / 1000;
-  document.getElementById("sumGraph_n_new").innerHTML = Math.round(sumN * 1000) / 1000;
+  document.getElementById("sumGraph_a_new").innerHTML = sumA.toFixed(3);
+  document.getElementById("sumGraph_n_new").innerHTML = sumN.toFixed(3);
   
   document.getElementById("sumGraph_graph_a_new").style.width = ((100 * sumA) / (sumA + sumN)) + "%";
   document.getElementById("sumGraph_graph_n_new").style.width = ((100 * sumN) / (sumA + sumN)) + "%";
@@ -208,6 +210,37 @@ function mouseClick(obj) {
   selectBoilers(selected, id)
 }
 
+addEvent(document, "keydown", function (e) {
+  var event = window.event ? window.event : e;
+  if (event.keyCode == 37) {
+    if (selected.length > 0) {
+      if (parseFloat(selected[0].className) - 1 >= 0) {
+        moveBoilers(selected, -1);
+        redrawColumns(selected);
+        selectBoilers(selected, selected[0].id.split("_")[0] + "_" + selected[0].id.split("_")[1] + "_");
+      }
+    }
+  } else if (event.keyCode == 39) {
+    if (selected.length > 0) {
+      if (parseFloat(selected[selected.length - 1].className) + 1 < data.length) {
+        moveBoilers(selected, 1);
+        redrawColumns(selected);
+        selectBoilers(selected, selected[0].id.split("_")[0] + "_" + selected[0].id.split("_")[1] + "_");
+      }
+    }
+  }
+});
+
+function addEvent(element, eventName, callback) {
+  if (element.addEventListener) {
+    element.addEventListener(eventName, callback, false);
+  } else if (element.attachEvent) {
+    element.attachEvent("on" + eventName, callback);
+  } else {
+    element["on" + eventName] = callback;
+  }
+}
+
 function switchAlert(obj) {
   if (obj.id == "InputType-OwnData") {
     var cols = document.getElementsByClassName('moreOptions');
@@ -237,8 +270,14 @@ function go() {
     document.getElementById("GrafData-Label").innerHTML = document.getElementById("GrafData-Label").innerHTML.replace("<img src=\"Images/error.png\">", "<span></span>");
     if ((parseInt(document.getElementById("TrafoData").value) > 0) && (!(document.getElementById("BoilerData").value == "")) && (!(document.getElementById("GrafData").value == ""))) {
       
+      data = document.getElementById("GrafData").value.split(";");
+      boiler = document.getElementById("BoilerData").value.split("!");
+      maxValue = parseInt(document.getElementById("TrafoData").value);
       
+      load();
       
+      document.getElementById("dark").style.display = "none";
+      document.getElementById("alert").style.display = "none";  
     } else {
       if (!(parseInt(document.getElementById("TrafoData").value) > 0)) {
         document.getElementById("TrafoData-Label").innerHTML = document.getElementById("TrafoData-Label").innerHTML.replace("<span></span>", "<img src=\"Images/error.png\">");
@@ -251,7 +290,8 @@ function go() {
       }
     }
   } else {
-    
+    document.getElementById("dark").style.display = "none";
+    document.getElementById("alert").style.display = "none";
   }
 }
 
@@ -357,8 +397,8 @@ function redrawColumns(list) {
     sumN += N;
   }
   
-  document.getElementById("sumGraph_a_new").innerHTML = Math.round(sumA * 1000) / 1000;
-  document.getElementById("sumGraph_n_new").innerHTML = Math.round(sumN * 1000) / 1000;
+  document.getElementById("sumGraph_a_new").innerHTML = sumA.toFixed(3);
+  document.getElementById("sumGraph_n_new").innerHTML = sumN.toFixed(3);
   
   document.getElementById("sumGraph_graph_a_new").style.width = ((100 * sumA) / (sumA + sumN)) + "%";
   document.getElementById("sumGraph_graph_n_new").style.width = ((100 * sumN) / (sumA + sumN)) + "%";
