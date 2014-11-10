@@ -6,7 +6,8 @@ function resizeDouble() {
 // Editable
 var margin = 30;
 var maxValue = 20;
-var paintCorrection = 0.01; // %                   
+var paintCorrection = 0.01; // %
+var legendLevel = 1; //Po kolika legenda (1x = tenká; 10x = tlustší; 100x = nejtlustší)                   
 ///Ediatble
 
 var selected = [];
@@ -23,6 +24,8 @@ var sumN = 0;
 
 var colorChange = 0;
 
+var loaded = false;
+
 function resize() {
   document.getElementById("graph").style.width = (document.documentElement.clientWidth - 200 - (2 * margin)) + "px";
   document.getElementById("graph").style.height = (document.documentElement.clientHeight - (2 * margin)) + "px";
@@ -31,6 +34,12 @@ function resize() {
   
   document.getElementById("alert").style.top = (document.documentElement.clientHeight - 400) / 2 + "px";
   document.getElementById("alert").style.left = (document.documentElement.clientWidth - 600) / 2 + "px";
+  
+  if (loaded) {
+    for (var i = 1; i < Math.floor(maxValue / legendLevel); i++) {
+      document.getElementById("legend_" + i).style.width = (document.documentElement.clientWidth - 200 - (2 * margin)) + "px";
+    }
+  }
 }
 
 function load() {
@@ -119,6 +128,17 @@ function load() {
   document.getElementById("sumGraph_graph_a_new").style.width = ((100 * sumA) / (sumA + sumN)) + "%";
   document.getElementById("sumGraph_graph_n_new").style.width = ((100 * sumN) / (sumA + sumN)) + "%";
   
+  for (var i = 1; i < Math.floor(maxValue / legendLevel); i++) {
+    if (i % (legendLevel * 100) == 0) {
+      document.getElementById("graph").innerHTML += "<div class=\"grafLegend1\" id=\"legend_" + i + "\" style=\"bottom: " + (100 * i) / maxValue + "%;\"><div class=\"grafLegendLabel\">" + i + "</div></div>";
+    } else if (i % (legendLevel * 10) == 0) {
+      document.getElementById("graph").innerHTML += "<div class=\"grafLegend2\" id=\"legend_" + i + "\" style=\"bottom: " + (100 * i) / maxValue + "%;\"><div class=\"grafLegendLabel\">" + i + "</div></div>";
+    } else {
+      document.getElementById("graph").innerHTML += "<div class=\"grafLegend3\" id=\"legend_" + i + "\" style=\"bottom: " + (100 * i) / maxValue + "%;\"></div>";
+    }
+  }
+  
+  loaded = true;
   resizeDouble();
 }
 
