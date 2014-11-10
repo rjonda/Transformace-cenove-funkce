@@ -11,8 +11,8 @@ var paintCorrection = 0.01; // %
 
 var selected = [];
 
-var data = getMainData().split(";");
-var boiler = getBoilerData().split("!");
+var data = [];
+var boiler = [];
 var boilerCount = 0;
 var isMouseDown = false;
 
@@ -21,18 +21,7 @@ var last_was_number = true;
 var sumA = 0;
 var sumN = 0;
 
-for (var i = 0; i < boiler.length; i++) {
-  if (parseFloat(boiler[i].split(";")[1]) > 0) {
-    if (! last_was_number) {
-      boilerCount++;
-    }
-    last_was_number = true;
-  } else {
-    last_was_number = false;
-  }
-}
-
-var colorChange = (255 * 2) / boilerCount;
+var colorChange = 0;
 
 function resize() {
   document.getElementById("graph").style.width = (document.documentElement.clientWidth - 200 - (2 * margin)) + "px";
@@ -45,10 +34,6 @@ function resize() {
 }
 
 function load() {
-  
-  document.getElementById("graph").innerHTML = "";
-  document.getElementById("boiler_list").innerHTML = "";
-  document.getElementById("data").innerHTML = "";
     
   var boiler_number_total = -1;
   
@@ -274,6 +259,22 @@ function go() {
       boiler = document.getElementById("BoilerData").value.split("!");
       maxValue = parseInt(document.getElementById("TrafoData").value);
       
+      for (var i = 0; i < boiler.length; i++) {
+        if (parseFloat(boiler[i].split(";")[1]) > 0) {
+          if (! last_was_number) {
+            boilerCount++;
+          }
+          last_was_number = true;
+        } else {
+          last_was_number = false;
+        }
+      }
+      
+      colorChange = (255 * 2) / boilerCount;
+      
+      console.log(data);
+      console.log(boiler);
+      
       load();
       
       document.getElementById("dark").style.display = "none";
@@ -290,6 +291,25 @@ function go() {
       }
     }
   } else {
+  
+    data = getMainData().split(";");
+    boiler = getBoilerData().split("!");
+    
+    for (var i = 0; i < boiler.length; i++) {
+      if (parseFloat(boiler[i].split(";")[1]) > 0) {
+        if (! last_was_number) {
+          boilerCount++;
+        }
+        last_was_number = true;
+      } else {
+        last_was_number = false;
+      }
+    }
+    
+    colorChange = (255 * 2) / boilerCount;
+    
+    load();
+    
     document.getElementById("dark").style.display = "none";
     document.getElementById("alert").style.display = "none";
   }
