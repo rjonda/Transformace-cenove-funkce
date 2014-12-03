@@ -6,7 +6,7 @@ function resizeDouble() {
 // Editable
 var margin = 30;
 var maxValue = 20;
-var paintCorrection = 0.01; // %
+var paintCorrection = -0.3; // %   Vzdálenost mezi sloupečky (kladné = překrytí, záporné = mezera)
 var legendLevel = 1; //Po kolika legenda (1x = tenká; 10x = tlustší; 100x = nejtlustší)                   
 ///Ediatble
 
@@ -114,16 +114,20 @@ function load() {
   
     sumA += sum - N;
     sumN += N;
+    
+    if ((i + 1)%4 == 0) {
+      document.getElementById("graph").innerHTML += "<div id=\"legendHorizont_" + i/4 + "\" style=\" color: rgba(0,0,0,0.5); text-align: center; width: 20%; left: " + (i*widthOfOneCol-10+((widthOfOneCol+paintCorrection)/2)) + "%; bottom: -20px; display: block; position: absolute;\">" + (i + 1)*(1440 / (data.length))/60 + "</div>"  
+    }
   }
   
-  document.getElementById("sumGraph_a_old").innerHTML = sumA.toFixed(3);
-  document.getElementById("sumGraph_n_old").innerHTML = sumN.toFixed(3);
+  document.getElementById("sumGraph_a_old").innerHTML = sumA.toFixed(3) + "<small> kW</small>";
+  document.getElementById("sumGraph_n_old").innerHTML = sumN.toFixed(3) + "<small> kW</small>";
   
   document.getElementById("sumGraph_graph_a_old").style.width = ((100 * sumA) / (sumA + sumN)) + "%";
   document.getElementById("sumGraph_graph_n_old").style.width = ((100 * sumN) / (sumA + sumN)) + "%";
   
-  document.getElementById("sumGraph_a_new").innerHTML = sumA.toFixed(3);
-  document.getElementById("sumGraph_n_new").innerHTML = sumN.toFixed(3);
+  document.getElementById("sumGraph_a_new").innerHTML = sumA.toFixed(3) + "<small> kW</small>";
+  document.getElementById("sumGraph_n_new").innerHTML = sumN.toFixed(3) + "<small> kW</small>";
   
   document.getElementById("sumGraph_graph_a_new").style.width = ((100 * sumA) / (sumA + sumN)) + "%";
   document.getElementById("sumGraph_graph_n_new").style.width = ((100 * sumN) / (sumA + sumN)) + "%";
@@ -169,6 +173,11 @@ function mouseMove(e) {
     mouseX = e.pageX
     mouseY = e.pageY
   }
+  
+  var obj = document.getElementById("help");
+  obj.style.top = mouseY + "px";
+  obj.style.left = (mouseX-200) + "px";
+  
   if (isMouseDown) {    
     var widthOfOneColPx = parseFloat(document.getElementById("graph").style.width) / data.length;
     
@@ -437,8 +446,8 @@ function redrawColumns(list) {
     sumN += N;
   }
   
-  document.getElementById("sumGraph_a_new").innerHTML = sumA.toFixed(3);
-  document.getElementById("sumGraph_n_new").innerHTML = sumN.toFixed(3);
+  document.getElementById("sumGraph_a_new").innerHTML = sumA.toFixed(3) + "<small> kW</small>";
+  document.getElementById("sumGraph_n_new").innerHTML = sumN.toFixed(3) + "<small> kW</small>";
   
   document.getElementById("sumGraph_graph_a_new").style.width = ((100 * sumA) / (sumA + sumN)) + "%";
   document.getElementById("sumGraph_graph_n_new").style.width = ((100 * sumN) / (sumA + sumN)) + "%";
@@ -448,10 +457,7 @@ function selectBoilers(list, id) {
   var selecter = document.getElementById("selecter");
   selecter.style.left = (parseFloat(list[0].getElementsByTagName("div")[0].style.left) - 0.15) + "%";
   selecter.style.backgroundColor = list[0].getElementsByTagName("div")[0].style.backgroundColor;
-  var width = 0;  
-  for (var i = 0; i < list.length; i++) {
-    width += parseFloat(list[i].getElementsByTagName("div")[0].style.width);
-  }
+  var width = (parseFloat(list[list.length - 1].getElementsByTagName("div")[0].style.width) - paintCorrection) * list.length + paintCorrection;  
   selecter.style.width = width + "%";
   selecter.style.display = "block";
 
@@ -471,4 +477,16 @@ function moveBoilers(list, move) {
     list[i].className = col;
     list[i].getElementsByTagName("div")[0].style.left = (col * (100 / data.length)) + "%";
   }
+}
+
+function helpOver(str) {
+  obj = document.getElementById("help");
+  obj.innerHTML = str;
+  obj.style.display = "block";
+}
+
+function helpOut(str) {
+  obj = document.getElementById("help");
+  obj.innerHTML = "&nbsp";
+  obj.style.display = "none";
 }

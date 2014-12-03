@@ -23,10 +23,10 @@
         <div id="sumGraph_graph_a_new"></div>
         <div id="sumGraph_graph_n_new"></div>
         
-        <div id="sumGraph_a_old">N/A</div>
-        <div id="sumGraph_n_old">N/A</div>
-        <div id="sumGraph_a_new">N/A</div>
-        <div id="sumGraph_n_new">N/A</div>
+        <div id="sumGraph_a_old" onMouseOver="helpOver('Hodnota užité energie na začátku')" onMouseOut="helpOut()">N/A</div>
+        <div id="sumGraph_n_old" onMouseOver="helpOver('Hodnota jalové energie na začátku')" onMouseOut="helpOut()">N/A</div>
+        <div id="sumGraph_a_new" onMouseOver="helpOver('Hodnota užité energie nyní')" onMouseOut="helpOut()">N/A</div>
+        <div id="sumGraph_n_new" onMouseOver="helpOver('Hodnota jalové energie nyní')" onMouseOut="helpOut()">N/A</div>
       </div>
       <p style="margin-top: 60px; text-align: center;"><b>Nové hodnoty</b></p>
       <div id="boiler_list">
@@ -81,5 +81,8 @@
         </p>
       </span>
     </span>
+    <div id="help">
+      &nbsp
+    </div>
   </body>
 </html>
